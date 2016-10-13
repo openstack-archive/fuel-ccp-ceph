@@ -1,0 +1,7 @@
+configs:
+  ceph:
+    fsid: "Changeme"
+    mon_host: "Changeme"
+  radosgw:
+    port: 7480
+    key: "Changeme"
