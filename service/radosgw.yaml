@@ -1,0 +1,50 @@
+service:
+  name: radosgw
+  ports:
+    - {{ radosgw.port }}
+  containers:
+    - name: radosgw
+      image: radosgw
+      probes:
+        readiness: "true"
+        liveness: "true"
+      pre:
+        - name: radosgw-create-swift-service
+          type: single
+          command: openstack service create --name swift --description "Swift Service" object-store
+          dependencies:
+            - keystone
+        - name: radosgw-create-swift-public-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift public
+                   "http://{{ address('radosgw') }}:{{ radosgw.port }}/swift/v1"
+          dependencies:
+            - radosgw-create-swift-service
+        - name: radosgw-create-swift-admin-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift admin
+                   "http://{{ address('radosgw') }}:{{ radosgw.port }}/swift/v1"
+          dependencies:
+            - radosgw-create-swift-service
+        - name: radosgw-create-swift-internal-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift internal
+                   "http://{{ address('radosgw') }}:{{ radosgw.port }}/swift/v1"
+          dependencies:
+            - radosgw-create-swift-service
+      daemon:
+        command: radosgw -c /etc/ceph/ceph.conf -n client.radosgw.gateway -d
+        files:
+          - ceph-conf
+          - radosgw-ceph-key
+          - radosgw-keyring
+files:
+  ceph-conf:
+    path: /etc/ceph/ceph.conf
+    content: ceph.conf.j2
+  radosgw-ceph-key:
+    path: /etc/ceph/ceph.client.radosgw.keyring
+    content: ceph.client.radosgw.keyring.j2
+  radosgw-keyring:
+    path: /var/lib/ceph/radosgw/ceph-rgw/keyring
+    content: ceph.client.radosgw.keyring.j2
