@@ -1,0 +1,9 @@
+Code-Review+2: Sergey Reshetnyak <sreshetniak@mirantis.com>
+Code-Review+2: Aleksandr Mogylchenko <amogylchenko@mirantis.com>
+Workflow+1: Aleksandr Mogylchenko <amogylchenko@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 27 Oct 2016 10:40:02 +0000
+Reviewed-on: https://review.openstack.org/390855
+Project: openstack/fuel-ccp-ceph
+Branch: refs/heads/master
