@@ -3,5 +3,6 @@ configs:
     fsid: "Changeme"
     mon_host: "Changeme"
   radosgw:
-    port: 7480
+    port:
+      cont: 7480
     key: "Changeme"
