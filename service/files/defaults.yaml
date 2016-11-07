@@ -6,3 +6,5 @@ configs:
     port:
       cont: 7480
     key: "Changeme"
+url:
+  ceph: http://eu.ceph.com/debian-jewel
