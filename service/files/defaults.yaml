@@ -6,3 +6,7 @@ configs:
     port:
       cont: 7480
     key: "Changeme"
+url:
+  ceph_repository: http://eu.ceph.com/debian-jewel
+  ceph_repository_keyserver: hkp://keyserver.ubuntu.com:80
+  ceph_repository_keyid: 460F3994
