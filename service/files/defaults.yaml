@@ -5,6 +5,7 @@ configs:
   radosgw:
     port:
       cont: 7480
+      ingress: object-store
     key: "Changeme"
 url:
   ceph:
