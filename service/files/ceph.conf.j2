@@ -16,7 +16,7 @@ rgw frontends = civetweb port={{ radosgw.port.cont }} num_threads=50
 rgw keystone api version = 3
 rgw keystone admin domain = default
 rgw keystone admin project = admin
-rgw keystone url = http://{{ address('keystone') }}:{{ keystone.admin_port.cont }}
+rgw keystone url = {{ address('keystone', keystone.admin_port, with_scheme=True) }}
 rgw keystone accepted roles = Member, _member_, admin
 rgw keystone revocation interval = 900
 rgw s3 auth use keystone = true

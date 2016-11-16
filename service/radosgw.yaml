@@ -19,19 +19,19 @@ service:
         - name: radosgw-create-swift-public-endpoint
           type: single
           command: openstack endpoint create --region RegionOne swift public
-                   "http://{{ address('radosgw') }}:{{ radosgw.port.cont }}/swift/v1"
+                   "{{ address('radosgw', radosgw.port, external=True, with_scheme=True) }}/swift/v1"
           dependencies:
             - radosgw-create-swift-service
         - name: radosgw-create-swift-admin-endpoint
           type: single
           command: openstack endpoint create --region RegionOne swift admin
-                   "http://{{ address('radosgw') }}:{{ radosgw.port.cont }}/swift/v1"
+                   "{{ address('radosgw', radosgw.port, with_scheme=True) }}/swift/v1"
           dependencies:
             - radosgw-create-swift-service
         - name: radosgw-create-swift-internal-endpoint
           type: single
           command: openstack endpoint create --region RegionOne swift internal
-                   "http://{{ address('radosgw') }}:{{ radosgw.port.cont }}/swift/v1"
+                   "{{ address('radosgw', radosgw.port, with_scheme=True) }}/swift/v1"
           dependencies:
             - radosgw-create-swift-service
       daemon:
