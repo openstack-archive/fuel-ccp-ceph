@@ -1,0 +1,9 @@
+Code-Review+2: Sergey Lukjanov <slukjanov@mirantis.com>
+Code-Review+2: Yuriy Taraday <yorik.sar@gmail.com>
+Workflow+1: Yuriy Taraday <yorik.sar@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 22 Nov 2016 08:55:14 +0000
+Reviewed-on: https://review.openstack.org/398271
+Project: openstack/fuel-ccp-ceph
+Branch: refs/heads/master
