@@ -6,11 +6,6 @@ service:
   containers:
     - name: radosgw
       image: radosgw
-      probes:
-        readiness: "true"
-        liveness:
-          command: "true"
-          type: "exec"
       pre:
         - name: radosgw-create-swift-service
           type: single
