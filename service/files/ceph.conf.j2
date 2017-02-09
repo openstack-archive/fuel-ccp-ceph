@@ -14,14 +14,14 @@ rgw data = /var/lib/ceph/radosgw/ceph-rgw
 rgw frontends = civetweb port={{ radosgw.port.cont }} num_threads=50
 
 rgw keystone api version = 3
-rgw keystone admin domain = default
-rgw keystone admin project = admin
+rgw keystone admin domain = {{ openstack.domain_name }}
+rgw keystone admin project = {{ openstack.project_name }}
 rgw keystone url = {{ address('keystone', keystone.admin_port, with_scheme=True) }}
 rgw keystone accepted roles = Member, _member_, admin
 rgw keystone revocation interval = 900
 rgw s3 auth use keystone = true
 #nss db path = /var/lib/ceph/radosgw/ceph-rgw.ccp/nss
 rgw keystone verify ssl = false
-rgw keystone admin user = admin
-rgw keystone admin password = password
+rgw keystone admin user = {{ openstack.user_name }}
+rgw keystone admin password = {{ openstack.user_password }}
 
