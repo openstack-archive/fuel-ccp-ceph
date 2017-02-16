@@ -1,0 +1,8 @@
+FROM {{ image_spec("openstack-base") }}
+MAINTAINER {{ maintainer }}
+
+RUN apt-get update \
+    && apt-get install -y -t jessie-backports --no-install-recommends swift-proxy \
+    && apt-get clean
+
+USER swift

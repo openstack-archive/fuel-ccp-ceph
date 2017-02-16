@@ -7,6 +7,29 @@ configs:
       cont: 7480
       ingress: object-store
     key: "Changeme"
+  swift:
+    proxy:
+      pipelines:
+        - catch_errors
+        - crossdomain
+        - healthcheck
+        - cache
+        - bulk
+        - tempurl
+        - ratelimit
+        - formpost
+        - swift3
+        - s3token
+        - authtoken
+        - keystone
+        - staticweb
+        - container_quotas
+        - account_quotas
+        - slo
+        - ceilometer
+        - proxy-server
+      port:
+        cont: 8080
 url:
   ceph:
     debian:
