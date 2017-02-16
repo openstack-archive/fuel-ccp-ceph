@@ -7,6 +7,35 @@ configs:
       cont: 7480
       ingress: object-store
     key: "Changeme"
+  swift:
+    proxy:
+      pipelines:
+        - catch_errors
+        - crossdomain
+        - healthcheck
+        - cache
+        - bulk
+        - tempurl
+        - ratelimit
+        - formpost
+        - swift3
+        - s3token
+        - authtoken
+        - keystone
+        - staticweb
+        - container_quotas
+        - account_quotas
+        - slo
+        - proxy-server
+      port:
+        cont: 8080
+sources:
+  openstack/swift:
+    git_url: https://git.openstack.org/openstack/swift.git
+    git_ref: stable/newton
+  openstack/swift3:
+    git_url: https://git.openstack.org/openstack/swift3.git
+    git_ref: master
 url:
   ceph:
     debian:

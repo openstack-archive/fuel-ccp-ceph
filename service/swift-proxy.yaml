@@ -1,0 +1,51 @@
+dsl_version: 0.7.0
+service:
+  name: swift-proxy
+  ports:
+    - {{ swift.proxy.port }}
+  containers:
+    - name: swift-proxy
+      image: swift-proxy
+      volumes:
+        - name: swift-rings
+          path: "/var/swift"
+          type: host
+          readOnly: false
+      pre:
+        - name: chown-datadir
+          command: sudo /bin/chown -R swift:swift /var/swift
+        - name: swift-proxy-create-swift-service
+          type: single
+          command: openstack service create --name swift --description "Swift Service" object-store
+          dependencies:
+            - keystone
+        - name: swift-proxy-create-swift-public-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift public
+                   "{{ address('swift-proxy', swift.proxy.port, external=True, with_scheme=True) }}/v1/AUTH_%(tenant_id)s"
+          dependencies:
+            - swift-proxy-create-swift-service
+        - name: swift-proxy-create-swift-admin-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift admin
+                   "{{ address('swift-proxy', swift.proxy.port, with_scheme=True) }}/v1/AUTH_%(tenant_id)s"
+          dependencies:
+            - swift-proxy-create-swift-service
+        - name: swift-proxy-create-swift-internal-endpoint
+          type: single
+          command: openstack endpoint create --region RegionOne swift internal
+                   "{{ address('swift-proxy', swift.proxy.port, with_scheme=True) }}/v1/AUTH_%(tenant_id)s"
+          dependencies:
+            - swift-proxy-create-swift-service
+      daemon:
+        command: swift-proxy-server /etc/swift/proxy-server.conf --verbose
+        files:
+          - swift-proxy-conf
+          - swift-conf
+files:
+  swift-proxy-conf:
+    path: /etc/swift/proxy-server.conf
+    content: swift-proxy.conf.j2
+  swift-conf:
+    path: /etc/swift/swift.conf
+    content: swift.conf

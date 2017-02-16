@@ -1,0 +1,95 @@
+[DEFAULT]
+swift_dir = /var/swift
+bind_ip = {{ network_topology["private"]["address"] }}
+bind_port = {{ swift.proxy.port.cont }}
+use_syslog = false
+use_stderr = true
+
+workers = 2
+user = swift
+
+[pipeline:main]
+pipeline = {{ swift.proxy.pipelines | join(" ") }}
+
+[app:proxy-server]
+use = egg:swift#proxy
+log_handoffs = true
+allow_account_management = true
+account_autocreate = true
+
+[filter:bulk]
+use = egg:swift#bulk
+max_containers_per_extraction = 10000
+max_failed_extractions = 1000
+max_deletes_per_request = 10000
+yield_frequency = 60
+
+[filter:authtoken]
+paste.filter_factory = keystonemiddleware.auth_token:filter_factory
+
+{{ keystone_authtoken.keystone_authtoken(swift.user, swift.password) }}
+
+[filter:cache]
+use = egg:swift#memcache
+memcache_servers = {{ address('memcached', memcached.port) }}
+
+[filter:catch_errors]
+use = egg:swift#catch_errors
+
+[filter:healthcheck]
+use = egg:swift#healthcheck
+
+[filter:ratelimit]
+use = egg:swift#ratelimit
+clock_accuracy = 1000
+max_sleep_time_seconds = 60
+log_sleep_time_seconds = 0
+rate_buffer_seconds = 5
+account_ratelimit = 0
+
+[filter:swift3]
+use = egg:swift3#swift3
+
+[filter:s3token]
+paste.filter_factory = keystonemiddleware.s3_token:filter_factory
+#auth_port = 35357
+#auth_protocol = http
+#auth_host = 
+
+{{ keystone_authtoken.keystone_authtoken(swift.user, swift.password) }}
+
+[filter:tempurl]
+use = egg:swift#tempurl
+
+[filter:formpost]
+use = egg:swift#formpost
+
+[filter:staticweb]
+use = egg:swift#staticweb
+
+[filter:ceilometer]
+use = egg:ceilometer#swift
+
+[filter:crossdomain]
+use = egg:swift#crossdomain
+cross_domain_policy = <allow-access-from domain="*" secure="false" />
+
+[filter:slo]
+use = egg:swift#slo
+max_manifest_segments = 1000
+max_manifest_size = 2097152
+min_segment_size = 1048576
+rate_limit_after_segment = 10
+rate_limit_segments_per_sec = 0
+max_get_time = 86400
+
+[filter:keystone]
+use = egg:swift#keystoneauth
+operator_roles = admin, SwiftOperator, _member_
+reseller_prefix = AUTH_
+
+[filter:account_quotas]
+use = egg:swift#account_quotas
+
+[filter:container_quotas]
+use = egg:swift#container_quotas
