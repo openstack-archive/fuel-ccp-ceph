@@ -7,6 +7,10 @@ configs:
       cont: 7480
       ingress: object-store
     key: "Changeme"
+  swift:
+    proxy:
+      port:
+        cont: 8080
 url:
   ceph:
     debian:
