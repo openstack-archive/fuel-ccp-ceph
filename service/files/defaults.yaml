@@ -6,7 +6,11 @@ configs:
     port:
       cont: 7480
       ingress: object-store
+
+secret_configs:
+  radosgw:
     key: "Changeme"
+
 url:
   ceph:
     debian:
