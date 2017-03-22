@@ -14,7 +14,7 @@ rgw data = /var/lib/ceph/radosgw/ceph-rgw
 rgw frontends = civetweb port={{ radosgw.port.cont }} num_threads=50
 
 rgw keystone api version = 3
-rgw keystone admin domain = {{ openstack.domain_name }}
+rgw keystone admin domain = Default
 rgw keystone admin project = {{ openstack.project_name }}
 rgw keystone url = {{ address('keystone', keystone.admin_port, with_scheme=True) }}
 rgw keystone accepted roles = Member, _member_, admin
